@@ -4,7 +4,7 @@ import { useState } from 'react';
 import logoSite from '@/public/logo.webp';
 import Image from 'next/image';
 import { FileText } from 'lucide-react';
-
+import Darkmode from '@/app/components/ui/Darkmode';
 export default function Nav() {
   const [activeAccordion, setActiveAccordion] = useState(null);
 
@@ -57,13 +57,14 @@ export default function Nav() {
 
     {/* Logo (aligné à gauche) */}
     <div className="flex-none w-24">
-      <Image
+    <a href={`http://localhost:3000`}>
+    <Image
         width={48}
         height={48}
         src={logoSite}
         alt="logo lego"
         className="rounded-full hover:scale-105 transition-transform duration-200"
-      />
+      /></a>
     </div>
 
     {/* Desktop menu (au centre) */}
@@ -98,8 +99,9 @@ export default function Nav() {
         Documentation
         <FileText className="w-4 h-4" />
       </button>
+     
     </div>
-
+< Darkmode/>
   </div>
 </div>
       </div>

@@ -59,16 +59,17 @@ export default function Home() {
   return (
     <div className="container w-full mx-auto p-4 text-blue-200">
       <div className="mb-3">
-        <h1 className="text-4xl font-bold text-center bg-gray-100 text-red-500">
+        <h1 className="text-4xl font-bold text-center  text-red-500">
           Liste des Films
         </h1> 
       </div>
       <Carousel2 DataCarousel={carousel}/>
-      <div className='bg-red-700 mt-4'>
-        <div className="grid grid-cols-2 sm:grid-cols-6 gap-4 justify-center bg-gray-100">
+      <div className=' mt-4'>
+        <div className="grid grid-cols-2 sm:grid-cols-6 gap-4 justify-center ">
           {movies.map((movie) => (
             <Card
               key={movie.id}
+              id={movie.id}
               title={movie.original_title}
               poster_path={movie.poster_path}
               release_date={movie.release_date}

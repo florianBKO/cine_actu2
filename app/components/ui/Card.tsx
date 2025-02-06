@@ -2,13 +2,14 @@ import { Clapperboard } from "lucide-react";
 import RadialProgress from './RadialProgress';
 
 interface CardProps {
+  id: number;
   title: string;
   poster_path: string;
   release_date: string;
   vote_average: number;
 }
 
-export default function Card({ title, poster_path, release_date, vote_average }: CardProps) {
+export default function Card({ id,title, poster_path, release_date, vote_average }: CardProps) {
   const imageUrl = poster_path 
     ? `https://image.tmdb.org/t/p/w500${poster_path}` 
     : 'https://via.placeholder.com/500';
@@ -55,8 +56,8 @@ export default function Card({ title, poster_path, release_date, vote_average }:
           </div>
           
           <button className="btn btn-sm bg-blue-500 hover:bg-blue-600 text-white w-full gap-2 transition-colors duration-200">
-            Plus d'infos
-            <Clapperboard className="w-4 h-4" />
+          <a href={`http://localhost:3000/movie/${id}`}>Plus d'infos</a>
+          <Clapperboard className="w-4 h-4" />
           </button>
         </div>
       </div>
