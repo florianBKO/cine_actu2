@@ -1,66 +1,40 @@
+// MoviePage.tsx
 import Image from "next/image";
-import { Star, Calendar, Heart, Eye, Trophy } from "lucide-react";
+import { Star, Calendar, Trophy, ThumbsDown, ThumbsUp, Play } from "lucide-react";
 import RadialProgress from '@/app/components/ui/RadialProgress';
+import { TrailerButton } from './components/TrailerButton';
+import ListSocial from '../../components/ui/listSocial';
+import { Movie, Trailer } from '@/app/prototypes';
+import Acteur from "@/app/components/server/Acteur";
+import InfoStat from "@/app/components/ui/InfoStat";
 
-interface MoviePageProps {
-  params: { id: string };
-}
 
-interface Movie {
-  id: number;
-  original_title: string;
-  overview?: string;
-  poster_path: string;
-  backdrop_path: string;
-  popularity: number;
-  release_date: string;
-  title: string;
-  video: string;
-  vote_count: number;
-  vote_average: number;
-}
+export default async function MoviePage(props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params;
 
-interface Acteur {
-  id: number;
-  name: string;
-  credit_id: string;
-  character: string;
-  profile_path: string;
-}
+  const [movieRes, trailerRes] = await Promise.all([
+    fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=be202a75160ad60b4028904d9b7e6e22`),
+    fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=be202a75160ad60b4028904d9b7e6e22`)
+  ]);
 
-export default async function MoviePage({ params }: MoviePageProps) {
-  const { id } = params; // Récupérer l'id depuis les paramètres d'URL
-
-  const res = await fetch(
-    `https://api.themoviedb.org/3/movie/${id}?api_key=be202a75160ad60b4028904d9b7e6e22`
-  );
-  const acteurRes = await fetch(
-    `https://api.themoviedb.org/3/movie/${id}/credits?api_key=be202a75160ad60b4028904d9b7e6e22`
-  );
-
-  const movie = await res.json() as Movie;
-  const acteurData = await acteurRes.json();
-  const acteurs = acteurData.cast as Acteur[];
-
-  if (!res.ok) {
+  if (!movieRes.ok) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="alert alert-error shadow-lg max-w-md">
-          <div>
-            <span>Erreur lors de la récupération du film</span>
-          </div>
+          <span>Erreur lors de la récupération du film</span>
         </div>
       </div>
     );
   }
 
+  const movie = await movieRes.json() as Movie;
+  const trailerData = await trailerRes.json();
+  const trailers = trailerData.results as Trailer[];
   if (!movie.poster_path) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="alert alert-warning shadow-lg max-w-md">
-          <div>
-            <span>Film non trouvé (ID: {id})</span>
-          </div>
+          <span>Film non trouvé (ID: {id})</span>
         </div>
       </div>
     );
@@ -73,118 +47,100 @@ export default async function MoviePage({ params }: MoviePageProps) {
       year: "numeric",
     });
   };
+  const time = Math.floor(movie.runtime / 60) + "h" + (movie.runtime % 60 < 10 ? "0" : "") + (movie.runtime % 60) + "m";
+  const rating = Number(movie.vote_average.toFixed(1));
+  const RatingIcon = rating > 5 ? ThumbsUp : ThumbsDown;
 
   return (
-    <div className="min-h-screen bg-base-200 p-6 ">
-      <div className="max-w-7xl mx-auto ">
-        <h1 className="text-4xl font-bold text-center mb-3">Film Recherché</h1>
+    <div className="min-h-screen  bg-base-200 py-12 px-4 sm:px-6">
+    <div className="max-w-7xl mx-auto">
+      <h1 className="text-5xl font-extrabold text-center mb-8  text-base-content font-serif tracking-tight">
+        Film Recherché
+      </h1>
 
-        <div
-          className="card lg:card-side bg-base-100 shadow-xl mb-8 p-6 bg-card pb-10 mt-10"
-          style={{ "--bg-image": `url(https://image.tmdb.org/t/p/w1280${movie.backdrop_path})` }}
-        >
-          <figure className="relative w-full lg:w-1/4 min-w-[280px] max-w-[280px] mx-auto lg:mx-0">
-            <div className="relative aspect-[2/3] w-full">
+      <div className="relative rounded-2xl overflow-hidden bg-black/30 backdrop-blur-sm shadow-2xl mb-12 border-2 border-solid border-primary">
+        {/* Background Image with Overlay */}
+        <div 
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: `url(https://image.tmdb.org/t/p/w1280${movie.backdrop_path})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+
+        <div className="relative z-10 p-8 lg:p-12 flex flex-col lg:flex-row gap-12">
+          {/* Poster */}
+          <div className="relative w-full lg:w-1/3 max-w-sm mx-auto lg:mx-0">
+            <div className="aspect-[2/3] relative rounded-xl overflow-hidden shadow-2xl">
               <Image
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title}
                 fill
                 sizes="(max-width: 768px) 80vw, (max-width: 1024px) 40vw, 280px"
-                className="rounded-lg object-cover"
+                className="object-cover"
                 priority
               />
             </div>
-            <button className="btn btn-circle absolute top-0 right-0 bg-base-100">
-              <RadialProgress vote_average={movie.vote_average} />
-            </button>
-          </figure>
-
-          <div className="card-body">
-            <h2 className="card-title text-2xl">{movie.title}</h2>
-            <p className="py-4">{movie.overview}</p>
-
-            <div className="grid grid-cols-2 gap-4 my-4">
-              <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-primary" />
-                <span>{formatDate(movie.release_date)}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Star className="w-5 h-5 text-warning" />
-                <span>{movie.vote_average.toFixed(1)} / 10</span>
-              </div>
-            </div>
-
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary gap-2">
-                <Eye className="w-5 h-5" />
-                Regarder maintenant
-              </button>
-              <button className="btn btn-outline gap-2">
-                <Heart className="w-5 h-5" />
-                Favoris
-              </button>
-            </div>
-
-            <div className="divider"></div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="stat bg border-black border-solid border rounded-lg ">
-                <div className="stat-figure text-secondary">
-                  <Trophy className="w-8 h-8" />
-                </div>
-                <div className="stat-title">Popularité</div>
-                <div className="stat-value">{Math.round(movie.popularity).toLocaleString()}</div>
-                <div className="stat-desc">Points de popularité</div>
-              </div>
-
-              <div className="stat">
-                <div className="stat-figure text-secondary">
-                  <Star className="w-8 h-8" />
-                </div>
-                <div className="stat-title">Total des votes</div>
-                <div className="stat-value">{movie.vote_count.toLocaleString()}</div>
-                <div className="stat-desc">Nombre d'évaluations</div>
-              </div>
-
-              <div className="stat">
-                <div className="stat-figure text-secondary"></div>
-                <div className="stat-title">Note moyenne</div>
-                <div className="stat-value">{movie.vote_average.toFixed(1)}/10</div>
-                <div className="stat-desc">Basé sur {movie.vote_count} votes</div>
-              </div>
-            </div>
           </div>
-        </div>
 
-        <h2 className="text-2xl font-bold mb-4">Acteurs</h2>
-        <div className="overflow-x-auto">
-          <div className="flex gap-2">
-            {acteurs.length === 0 ? (
-              <p>Aucun acteur trouvé</p>
-            ) : (
-              acteurs.map((actor) => (
-                actor.profile_path ? (
-                  <div key={actor.id} className="card w-64 bg-base-100 shadow-xl flex-none">
-                    <figure>
-                      <img
-                        src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
-                        alt={actor.name}
-                        className="rounded-lg"
-                        width={150}
-                        height={225}
-                      />
-                    </figure>
-                    <div className="card-body">
-                      <h3 className="card-title">{actor.name}</h3>
-                      <p>Rôle: {actor.character}</p>
-                    </div>
-                  </div>
-                ) : null
-              ))
+          {/* Content */}
+          <div className="flex-1 text-white">
+            <h2 className="text-4xl font-bold mb-4 font-serif text-base-content">{movie.title}</h2>
+            <p className="text-lg leading-relaxed mb-6  text-base-content">{movie.overview}</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="flex items-center gap-3 text-gray-200">
+                <Calendar className="w-6 h-6 text-primary" />
+                <span className="text-lg text-base-content">{formatDate(movie.release_date)}</span>
+              </div>
+              <div className="flex items-center gap-3 ">
+                <Star className="w-6 h-6 text-yellow-400" />
+                <span className="text-lg text-base-content">{rating} / 10</span>
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+   
+              <InfoStat titre='Popularité' value={Math.round(movie.popularity).toLocaleString()} description='Points de popularité' icon={Trophy}/>
+              <InfoStat titre='Total des votes' value={movie.vote_count} description='Nombre dévaluations' icon={Star}/>
+              <InfoStat titre='Note moyenne' value={`${rating}/10`}   description={`Basé sur ${movie.vote_count} votes`}  icon={RatingIcon}/>
+          
+            </div>
+
+            {/* Duration */}
+            <p className="text-right text-lg mb-6 text-base-content">Durée du film: {time}</p>
+
+            {/* Trailer Button */}
+            {trailers.length > 0 && (
+              <div className="flex justify-between items-center mb-6">
+                <ListSocial id={id} />
+                <TrailerButton trailerKey={trailers[0].key} />
+              </div>
             )}
+
+            {/* Genres */}
+            <div className="mt-8">
+              <h2 className="text-2xl font-bold mb-4 text-base-content">Catégories</h2>
+              <div className="flex flex-wrap gap-3">
+                {movie.genres.map((genre) => (
+                  <span
+                    key={genre.id}
+                    className="px-4 py-2 rounded-full bg-primary/80 text-base-content font-medium"
+                  >
+                    {genre.name}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Cast Section */}
+      <Acteur id={id} />
     </div>
+  </div>
   );
 }

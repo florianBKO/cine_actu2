@@ -19,8 +19,8 @@ interface CarouselProps {
 
 export default function Carousel({ DataCarousel }: CarouselProps) {
   return (
-    <div className="w-full max-w-5xl mx-auto">
-      <h4 className="flex justify-center mt-4 bg-indigo-600">Les films du moments</h4>
+    <div className="w-full max-w-5xl mx-auto ">
+      <h4 className="flex justify-center mt-4 bg-primary mb-2 rounded">Les films du moments</h4>
       <Swiper
   modules={[Autoplay, Pagination, Navigation]}
   slidesPerView={5} // Nombre d'images sur les grands écrans
@@ -29,7 +29,7 @@ export default function Carousel({ DataCarousel }: CarouselProps) {
   autoplay={{ delay: 2500, disableOnInteraction: false }}
   pagination={{ clickable: true }}
   navigation
-  className="rounded-lg shadow-xl"
+  className="rounded-lg shadow-xl text-primary"
   breakpoints={{
     320: {
       slidesPerView: 1, // Sur les petits écrans (mobile), afficher 1 image
@@ -43,13 +43,13 @@ export default function Carousel({ DataCarousel }: CarouselProps) {
   }}
 >
         {DataCarousel.map((item, index) => (
-          <SwiperSlide key={index} className="w-1/5">
+          <SwiperSlide key={index} className="w-1/5 ">
             <div className="relative">
-              <div className="absolute inset-0 bg-black/50 blur-lg rounded-lg"></div>
+              <div className="absolute inset-0 blur-lg rounded-lg"></div>
               <img
                 src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
                 alt={`Slide ${index}`}
-                className="w-full h-94 sm:h-64 object-cover rounded-lg shadow-lg"
+                className="w-full h-94 sm:h-70 object-cover rounded-lg shadow-lg"
               />
             </div>
           </SwiperSlide>

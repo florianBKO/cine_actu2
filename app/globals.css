@@ -5,6 +5,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --swiper-pagination-color: #fecc00; /* Bleu */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -34,7 +35,6 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: var(--bg-image);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -45,4 +45,19 @@ body {
 .bg-card > * {
   position: relative;
   z-index: 1;
+}
+.swiper-button-prev,
+.swiper-button-next,
+.swiper-pagination-bullet-active  {
+  color: #fecc00 !important; /* Utilisation de la couleur primaire de Tailwind */
+  font-size: 18px !important;
+}
+
+
+* {
+  scrollbar-color: #fecc00 transparent;
+}
+
+*:hover {
+  scrollbar-color: #fecc00 transparent;
 }
