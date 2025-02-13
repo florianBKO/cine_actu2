@@ -45,7 +45,7 @@ export default function Card({ id, title, poster_path, release_date, vote_averag
 
         {/* Actions */}
         <div className="card-actions flex flex-col items-center gap-2 ">
-          <Link href={`${process.env.NEXT_PUBLIC_PATH_URL}/movie/${id}`}>
+          <Link href={`/movie/${id}`}>
             <button className="btn btn-sm bg-blue-500 hover:bg-blue-600 text-white w-full gap-2 transition-colors duration-200 ">
               Plus d'infos
               <Clapperboard className="w-4 h-4" />

@@ -1,11 +1,8 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
-import Image from 'next/image';
 import { Actor } from '../prototypes';
-
-
+import FetchError from '../components/ui/FetchError';
 
 export default function HomeContent() {
     const [actors, setActors] = useState<Actor[]>([]);
@@ -17,16 +14,8 @@ export default function HomeContent() {
             try {
                 setLoading(true);
                 setError(null);
-
-                const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_PATH_URL}/api/acteur?categorie=les plus populaires`,
-                    { cache: 'no-store' } // Désactive le cache pour obtenir des données fraîches
-                );
-
-                if (!response.ok) {
-                    throw new Error('Erreur lors de la récupération des acteurs');
-                }
-
+                const response = await fetch(`${process.env.NEXT_PUBLIC_PATH_URL}/api/actor?categorie=les plus populaire`,
+                { cache: 'no-store' } );
                 const data = await response.json();
                 setActors(data.results); // TMDB retourne les acteurs sous "results"
             } catch (err) {
@@ -35,25 +24,11 @@ export default function HomeContent() {
                 setLoading(false);
             }
         };
-
         fetchActors();
     }, []);
 
     if (error) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="text-center p-8 bg-red-50 rounded-lg shadow-md">
-                    <h2 className="text-2xl font-bold text-red-600 mb-4">Erreur</h2>
-                    <p className="text-red-500">{error}</p>
-                    <button
-                        onClick={() => window.location.reload()}
-                        className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-                    >
-                        Réessayer
-                    </button>
-                </div>
-            </div>
-        );
+        return ( <FetchError error={error} /> );
     }
 
     return (
@@ -65,23 +40,19 @@ export default function HomeContent() {
 
                 {loading ? (
                     <div className="flex items-center justify-center min-h-[50vh]">
-                        <Loader2 className="w-12 h-12 animate-spin text-blue-500" />
+                        <Loader2 className="w-20 h-20 animate-spin text-blue-500" />
                     </div>
                 ) : (
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                         {actors.map((actor) => (
                             <div key={actor.id} className="group text-center p-4 bg-white rounded-lg shadow-md border-2 border-solid border-primary transition-transform duration-300 hover:scale-105"
                             >
-                                <Image
-                                    src={
-                                        actor.profile_path
-                                            ? `https://image.tmdb.org/t/p/w500${actor.profile_path}`
-                                            : '/default-profile.png'
-                                    }
+                                <img
+                                    src={actor.profile_path ? `https://image.tmdb.org/t/p/w500${actor.profile_path}` : '/default-profile.png'}
                                     alt={actor.name}
                                     width={100}
                                     height={200}
-                                    className=" mx-auto mb-3 w-full "
+                                    className="mx-auto mb-3 w-full"
                                 />
                                 <h2 className="text-lg font-semibold text-black">{actor.name}</h2>
                                 <p className="text-gray-500 text-sm">{actor.known_for_department}</p>

@@ -7,6 +7,8 @@ import ListSocial from '../../components/ui/listSocial';
 import { Movie, Trailer } from '@/app/prototypes';
 import Acteur from "@/app/components/server/Acteur";
 import InfoStat from "@/app/components/ui/InfoStat";
+import FetchError from "@/app/components/ui/FetchError";
+import Reviews from "@/app/components/ui/Comment";
 
 
 export default async function MoviePage(props: { params: Promise<{ id: string }> }) {
@@ -19,11 +21,7 @@ export default async function MoviePage(props: { params: Promise<{ id: string }>
 
   if (!movieRes.ok) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="alert alert-error shadow-lg max-w-md">
-          <span>Erreur lors de la récupération du film</span>
-        </div>
-      </div>
+<FetchError error={'erreur de chargement'} />
     );
   }
 
@@ -73,13 +71,11 @@ export default async function MoviePage(props: { params: Promise<{ id: string }>
           {/* Poster */}
           <div className="relative w-full lg:w-1/3 max-w-sm mx-auto lg:mx-0">
             <div className="aspect-[2/3] relative rounded-xl overflow-hidden shadow-2xl">
-              <Image
+              <img
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title}
-                fill
                 sizes="(max-width: 768px) 80vw, (max-width: 1024px) 40vw, 280px"
                 className="object-cover"
-                priority
               />
             </div>
           </div>
@@ -140,6 +136,7 @@ export default async function MoviePage(props: { params: Promise<{ id: string }>
 
       {/* Cast Section */}
       <Acteur id={id} />
+      <Reviews id={id} />
     </div>
   </div>
   );

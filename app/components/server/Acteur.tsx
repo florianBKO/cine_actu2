@@ -10,7 +10,6 @@ export default async function Acteur({ id }: { id: string }) {
       `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${process.env.API_KEY_THEMOVIE}`,
       { next: { revalidate: 3600 } }
     );
-
     if (!actorRes.ok) {
       throw new Error('Erreur lors de la récupération des acteurs');
     }
@@ -34,10 +33,9 @@ export default async function Acteur({ id }: { id: string }) {
                 actor.profile_path ? (
                   <div key={actor.id} className="card w-64 bg-base-100 shadow-xl flex-none border-2 border-solid border-primary">
                     <figure className="relative h-96">
-                      <Image
+                      <img
                         src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`}
                         alt={actor.name}
-                        fill
                         className="object-cover rounded-t-lg"
                       />
                     </figure>
