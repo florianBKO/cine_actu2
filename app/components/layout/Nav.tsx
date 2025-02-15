@@ -72,7 +72,7 @@ export default function Nav() {
   };
 
   return (
-    <div className="drawer z-50 info-content">
+    <div className="drawer z-50 info-content" id="topPage">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
 
       <div className="drawer-content flex flex-col">
