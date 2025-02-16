@@ -3,14 +3,17 @@
 import { useState, useRef, useEffect } from 'react';
 import logoSite from '@/public/logo.png';
 import Image from 'next/image';
-import { FileText } from 'lucide-react';
+import { FilePen, FileText, LogIn, LogOut } from 'lucide-react';
 import Darkmode from '@/app/components/ui/Darkmode';
 import Link from 'next/link';
+import LogoutButton from './LogoutButton';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Nav() {
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const dropdownRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const { user, userLoading } = useAuth();
 
   const menuItems = [
     {
@@ -37,6 +40,11 @@ export default function Nav() {
       name: 'Artistes',
       subItems: ['Populaire'],
       link: [`/acteur`],
+    },
+    {
+      name: 'Favoris',
+      subItems: ['Liste des favoris'],
+      link: [`/favoris`],
     },
   ];
 
@@ -121,8 +129,8 @@ export default function Nav() {
                       <ul className="dropdown-content z-[100] menu p-2 shadow-lg bg-white rounded-box w-52">
                         {item.subItems.map((subItem, subIndex) => (
                           <li key={subIndex}>
-                            <Link 
-                              className="py-2 hover:bg-gray-400" 
+                            <Link
+                              className="py-2 hover:bg-gray-400"
                               href={item.link[subIndex]}
                               onClick={() => setActiveDropdown(null)}
                             >
@@ -145,7 +153,32 @@ export default function Nav() {
                 <FileText className="w-4 h-4" />
               </button>
             </div>
-            <Darkmode />
+            <span className='sm:mx-3'><Darkmode /></span>
+            {userLoading ? (
+              <div>Chargement...</div>
+            ) : user ? (
+              <>
+           < LogoutButton/>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  title='Connexion'
+                  className="text-base-dark px-4 py-2 rounded-full border-2 border-solid border-black ml-3"
+                >
+                  <LogIn />
+                </Link>
+                <Link
+                  href="/signup"
+                  title='Inscription'
+                  className="text-base-dark px-4 py-2  px-4 py-2 rounded-full border-2 border-solid border-black ml-3"
+                >
+                  <FilePen />        
+                          </Link>
+              </>
+            )}
+
           </div>
         </div>
       </div>
@@ -166,8 +199,8 @@ export default function Nav() {
                   <ul className="menu menu-sm">
                     {item.subItems.map((subItem, subIndex) => (
                       <li key={subIndex}>
-                        <Link 
-                          className="py-2 hover:bg-gray-400" 
+                        <Link
+                          className="py-2 hover:bg-gray-400"
                           href={item.link[subIndex]}
                           onClick={handleMobileLinkClick}
                         >

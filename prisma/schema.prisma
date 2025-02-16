@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int       @id @default(autoincrement()) // ID auto-incrémenté
+  pseudo   String?   
+  email    String?  
+  image    String?   
+  password String?   
+  favorie  Favorie[]
+}
+
+model Favorie {
+  id       Int    @id @default(autoincrement()) // ID auto-incrémenté
+  id_movie Int
+  state    String 
+  userId   Int // Changement en Int pour correspondre à User.id
+  user     User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId, id_movie])
+  @@index([userId])
+}

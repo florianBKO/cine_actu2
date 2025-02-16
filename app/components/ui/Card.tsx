@@ -1,12 +1,15 @@
-import { Clapperboard, } from "lucide-react";
+import { Clapperboard, Heart, } from "lucide-react";
 import RadialProgress from './RadialProgress';
 import { CardProps } from '@/app/prototypes';
 import Link from "next/link";
+import { useAuth } from '@/contexts/AuthContext';
+import FavorieHeart from "./FavorieHeart";
 
 
-export default function Card({ id, title, poster_path, release_date, vote_average }: CardProps) {
+export default function Card({ id, title, poster_path, release_date, vote_average,favorite }: CardProps) {
   const imageUrl = poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : 'https://via.placeholder.com/500';
-
+  const { user }   = useAuth();
+console.log(user?.id);
   // Formatage de la date
   const formattedDate = new Date(release_date).toLocaleDateString('fr-FR', {
     year: 'numeric',
@@ -39,8 +42,9 @@ export default function Card({ id, title, poster_path, release_date, vote_averag
       {/* Card Content */}
       <div className="card-body p-4 bg-white">
         {/* Titre */}
-        <h4 className="card-title text-base font-bold text-center line-clamp-2 min-h-[2rem]  text-base-dark">
-          {title}
+        <h4 className="card-title text-base font-bold text-center line-clamp-2 min-h-[2rem]  text-base-dark flex justify-center">
+          {title}        <FavorieHeart movieId={id} id={user?.id} favorite={favorite} />
+
         </h4>
 
         {/* Actions */}
@@ -51,6 +55,7 @@ export default function Card({ id, title, poster_path, release_date, vote_averag
               <Clapperboard className="w-4 h-4" />
             </button>
           </Link>
+        
           <div className=" text-xs px-3 text-base-dark">
             Date de sortie {formattedDate}
           </div>

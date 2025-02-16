@@ -34,6 +34,7 @@ export interface Actor {
     poster_path: string;
     release_date: string;
     vote_average: number;
+    favorite: boolean;
   }
   
  
