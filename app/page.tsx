@@ -130,7 +130,7 @@ function HomeContent() {
       <header className="mb-8">
         <InputSearchMovies search={search} setSearch={handleSearch} setMovie={setMovies} />
 
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-base-200 bg-clip-text bg-gradient-to-r text-base-content">
+        <h1 className="text-4xl md:text-5xl font-bold text-center  bg-clip-text bg-gradient-to-r text-base-content">
           Découvrez les Films {categorie}
         </h1>
       </header>

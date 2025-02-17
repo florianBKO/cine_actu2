@@ -47,22 +47,22 @@ export default function LoginPage() {
           </div>
         )}
 <div className="hero bg-base-200 min-h-screen">
-  <div className="hero-content flex-col lg:flex-row-reverse">
-    <div className="text-center lg:text-left">
-      <h1 className="text-5xl font-bold">Connectez-vous maintenant !</h1>
-      <p className="py-6">
+  <div className="hero-content flex-col lg:flex-row-reverse card border-2 border-solid border-primary m-2 text-base-content">
+    <div className="text-center lg:text-left ">
+      <h1 className="text-5xl font-bold ">Connectez-vous maintenant !</h1>
+      <p className="py-6 hidden sm:block ">
         Découvrez des fonctionnalités exclusives en vous connectant. Récupérez vos informations
         et gérez vos préférences en toute sécurité.
       </p>
     <div className='flex justify-center '>
-            <video className="w-[400px] aspect-video rounded-lg shadow-lg" autoPlay muted loop>
+            <video className="w-[360px] sm:w-[450px] aspect-video rounded-lg shadow-lg my-2" autoPlay muted loop>
   <source src={`${process.env.NEXT_PUBLIC_PATH_URL}/intro.mp4`} type="video/mp4" />
   Votre navigateur ne supporte pas la vidéo.
 </video>
     </div>
 
     </div>
-    <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+    <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl border-2 border-solid border-primary">
       <form className="card-body" onSubmit={handleSubmit}>
         <div className="form-control">
           <label className="label">

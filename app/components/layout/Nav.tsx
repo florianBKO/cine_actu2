@@ -94,7 +94,7 @@ export default function Nav() {
               </label>
             </div>
 
-            <div className="flex-none w-24">
+            <div className="flex-none w-24 ">
               <Link className="py-2" href={`/`}>
                 <Image
                   width={58}
@@ -145,24 +145,29 @@ export default function Nav() {
               </ul>
             </div>
 
-            <div className="flex-none">
+            <div className="flex hidden sm:block">
               <button className="btn btn-sm hover:bg-base-dark flex items-center gap-2">
                 <Link className="text-base-dark" href={`/documentation`}>
                   Documentation
                 </Link>
                 <FileText className="w-4 h-4" />
-              </button>
+              </button>           
+
             </div>
-            <span className='sm:mx-3'><Darkmode /></span>
             {userLoading ? (
               <div>Chargement...</div>
             ) : user ? (
               <>
-           < LogoutButton/>
+              <div>
+                         <span className='sm:mx-3'><Darkmode /></span>  < LogoutButton/> 
+
+              </div>
               </>
             ) : (
               <>
-                <Link
+              <div className='flex items-center'>
+              <span className='sm:mx-3'><Darkmode /></span>
+                      <Link
                   href="/login"
                   title='Connexion'
                   className="text-base-dark px-4 py-2 rounded-full border-2 border-solid border-black ml-3"
@@ -176,6 +181,8 @@ export default function Nav() {
                 >
                   <FilePen />        
                           </Link>
+              </div>
+          
               </>
             )}
 
@@ -209,9 +216,19 @@ export default function Nav() {
                       </li>
                     ))}
                   </ul>
+            
                 </div>
               </div>
             ))}
+                  <div className="flex-none collapse collapse-arrow border border-base-300 bg-base-200 ">
+                <Link className="text-base-dark" href={`/documentation`}>
+                <button className="btn btn-sm hover:bg-base-dark flex justify-start gap-2 my-3 ml-1">
+
+                  Documentation                        <FileText className="w-4 h-4" />
+      </button>
+
+                </Link>
+            </div>
           </div>
         </div>
       </div>

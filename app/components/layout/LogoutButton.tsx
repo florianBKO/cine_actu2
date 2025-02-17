@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { Power } from 'lucide-react';
 
 export default function LogoutButton() {
   const { setUser } = useAuth(); // Récupérer setUser pour mettre à jour l'état global
@@ -23,9 +24,8 @@ export default function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700"
+      className="px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-700 rounded-full" title="Déconnexion"
     >
-      Déconnexion
-    </button>
+<Power />    </button>
   );
 }

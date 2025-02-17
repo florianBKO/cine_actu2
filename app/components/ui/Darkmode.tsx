@@ -27,7 +27,7 @@ function Darkmode() {
   };
 
   return (
-    <label className="swap swap-rotate ms-2">
+    <label className="swap swap-rotate ms-2 border border-black rounded-full p-2">
       {/* L'input coche la case en fonction du thème */}
       <input 
         type="checkbox" 
