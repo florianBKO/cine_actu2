@@ -4,8 +4,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Mail, User, UserPlus, Lock } from 'lucide-react';
+import { useAlert } from '@/contexts/Alert';
 
 export default function SignupPage() {
+  const { addAlert } = useAlert(); // Ajouter le hook useAlert
   const [formData, setFormData] = useState({
     pseudo: '',
     email: '',
@@ -52,110 +55,151 @@ export default function SignupPage() {
         const data = await res.json();
         throw new Error(data.message || 'Une erreur est survenue');
       }
-
-      router.push('/login?success=1');
+      addAlert('Votre compte a été créé avec succès ! 🎉', 'success');
+      router.push('/login');
     } catch (err: any) {
       setError(err.message);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Créer un compte
-          </h2>
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-base-200">
+      <div className="max-w-md w-full bg-base-200">
+        <div className="rounded-2xl shadow-xl p-8 space-y-8 border-2 border-solid border-primary ">
+          <div className="text-center space-y-2">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 border-2 border-primary mb-4 ">
+              <UserPlus className="w-8 h-8 text-primary" />
+            </div>
+            <h2 className="text-3xl font-extrabold  tracking-tight text-base-content">
+              Créer un compte
+            </h2>
+            <p className="text-sm text-base-content">
+              Rejoignez-nous pour commencer votre aventure
+            </p>
+          </div>
+
+          {error && (
+            <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-red-700">{error}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-5">
+              <div className="relative">
+                <label htmlFor="pseudo" className="block text-sm font-medium text-base-content mb-1">
+                  Pseudo
+                </label>
+                <div className="relative rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <User className="h-5 w-5 text-dark " />
+                  </div>
+                  <input
+                    id="pseudo"
+                    name="pseudo"
+                    type="text"
+                    required
+                    className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:ring-2 focus:ring-indigo-600 focus:border-transparent py-3 text-sm"
+                    placeholder="Votre pseudo"
+                    value={formData.pseudo}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div className="relative">
+                <label htmlFor="email" className="block text-sm font-medium text-base-content mb-1">
+                  Email
+                </label>
+                <div className="relative rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Mail className="h-5 w-5  text-dark" />
+                  </div>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:ring-2 focus:ring-indigo-600 focus:border-transparent py-3 text-sm"
+                    placeholder="votre@email.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div className="relative">
+                <label htmlFor="password" className="block text-sm font-medium text-base-content mb-1">
+                  Mot de passe
+                </label>
+                <div className="relative rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-dark" />
+                  </div>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:ring-2 focus:ring-indigo-600 focus:border-transparent py-3 text-sm"
+                    placeholder="Mot de passe"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div className="relative">
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-base-content mb-1">
+                  Confirmer le mot de passe
+                </label>
+                <div className="relative rounded-md shadow-sm">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-dark " />
+                  </div>
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    required
+                    className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:ring-2 focus:ring-indigo-600 focus:border-transparent py-3 text-sm"
+                    placeholder="Confirmer le mot de passe"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="submit"
+                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium  bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 transition-colors duration-200 text-base-dark"
+              >
+                S'inscrire
+              </button>
+            </div>
+
+            <div className="text-center text-sm">
+              <span className="text-base-content">Déjà inscrit ?</span>{' '}
+              <Link 
+                href="/login" 
+                className="font-medium   text-primary"
+              >
+                Se connecter
+              </Link>
+            </div>
+          </form>
         </div>
-
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-            {error}
-          </div>
-        )}
-
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <label htmlFor="pseudo" className="block text-sm font-medium text-gray-700">
-                Pseudo
-              </label>
-              <input
-                id="pseudo"
-                name="pseudo"
-                type="text"
-                required
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Votre pseudo"
-                value={formData.pseudo}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="votre@email.com"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Mot de passe
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Mot de passe"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirmer le mot de passe
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Confirmer le mot de passe"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              S'inscrire
-            </button>
-          </div>
-
-          <div className="text-center">
-            <Link href="/login" className="text-indigo-600 hover:text-indigo-500">
-              Déjà inscrit ? Se connecter
-            </Link>
-          </div>
-        </form>
       </div>
     </div>
   );

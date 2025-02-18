@@ -18,7 +18,7 @@ export async function GET(request: Request) {
         state: 'active',   // Filtrer par l'état "active"
       },
     });
-
+    console.log(favoris);
     if (favoris.length === 0) {
       return NextResponse.json({ message: 'Aucun favori trouvé pour cet utilisateur' }, { status: 404 });
     }

@@ -37,5 +37,9 @@ export interface Actor {
     favorite: boolean;
   }
   
- 
+  export interface FavorieHeartProps {
+    movieId: number;
+    id: number | undefined; // Utilisateur connecté
+    favorite: boolean;
+  }
   

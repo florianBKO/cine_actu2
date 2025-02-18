@@ -34,6 +34,12 @@ export async function GET(request: Request) {
     const res = await fetch(`${BASE_URL}/movie/upcoming?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
     return NextResponse.json(await res.json());
   }
+  // Récupère les prochaines sorties
+  if (categorie === 'videos') {
+    const id = searchParams.get('id');
+    const res = await fetch(`${BASE_URL}/movie/${id}/videos?api_key=${apiKey}`, { cache: 'no-store' });
+    return NextResponse.json(await res.json());
+  }
 
 
 
@@ -60,5 +66,13 @@ export async function GET(request: Request) {
     const res = await fetch(`${BASE_URL}/movie/${id}?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
     return NextResponse.json(await res.json());
   }
-
+  // Récupère les détails d'un film spécifique (nécessite le paramètre "id")
+  if (categorie === 'oneMovie') {
+    const id = searchParams.get('id');
+    if (!id) {
+      return NextResponse.json({ error: 'Le paramètre "id" est requis pour récupérer les détails.' }, { status: 400 });
+    }
+    const res = await fetch(`${BASE_URL}/movie/${id}?api_key=${apiKey}`, { cache: 'no-store' });
+    return NextResponse.json(await res.json());
+  }
 }

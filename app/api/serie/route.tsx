@@ -29,6 +29,7 @@ export async function GET(request: Request) {
       case 'Les mieux évalués':
         url = `${BASE_URL}/discover/tv?api_key=${apiKey}&language=fr-FR&sort_by=vote_average.desc&vote_count.gte=100`;
         break;
+        
 
       case 'search':
         const query = searchParams.get('query');
@@ -38,7 +39,9 @@ export async function GET(request: Request) {
         url = `${BASE_URL}/search/tv?api_key=${apiKey}&language=fr-FR&query=${encodeURIComponent(query)}`;
         break;
 
-      case 'detail':
+
+        
+      case 'oneMovie':
         const id = searchParams.get('id');
         if (!id) {
           return NextResponse.json({ error: 'Le paramètre "id" est requis pour récupérer les détails.' }, { status: 400 });

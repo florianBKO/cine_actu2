@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'; // Assure-toi que prisma est bien configuré dans lib/prisma.ts
 
 export async function GET(request: Request) {
-  console.log('test fav');
 
 
   const { searchParams } = new URL(request.url);

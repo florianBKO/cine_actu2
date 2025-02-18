@@ -61,3 +61,13 @@ body {
 *:hover {
   scrollbar-color: #fecc00 transparent;
 }
+
+.placeholder{
+  color: rgb(173, 173, 173) ;
+}
+
+.favorieCard{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}

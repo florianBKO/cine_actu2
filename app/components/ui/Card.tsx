@@ -9,7 +9,6 @@ import FavorieHeart from "./FavorieHeart";
 export default function Card({ id, title, poster_path, release_date, vote_average,favorite }: CardProps) {
   const imageUrl = poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : 'https://via.placeholder.com/500';
   const { user }   = useAuth();
-console.log(user?.id);
   // Formatage de la date
   const formattedDate = new Date(release_date).toLocaleDateString('fr-FR', {
     year: 'numeric',
@@ -42,8 +41,10 @@ console.log(user?.id);
       {/* Card Content */}
       <div className="card-body p-4 bg-white">
         {/* Titre */}
-        <h4 className="card-title text-base font-bold text-center line-clamp-2 min-h-[2rem]  text-base-dark flex justify-center">
-          {title}        <FavorieHeart movieId={id} id={user?.id} favorite={favorite} />
+        <h4 className="card-title text-base font-bold text-center line-clamp-2 min-h-[2rem]  text-base-dark flex justify-center" style={{position: "relative"}}>
+          {title}   
+          {user ? 
+          <FavorieHeart movieId={id} id={user?.id} favorite={favorite} /> : null}
 
         </h4>
 

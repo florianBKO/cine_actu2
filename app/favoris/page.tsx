@@ -2,19 +2,23 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Movie } from '@/app/prototypes';
-import { Heart } from 'lucide-react';
+import FavorieHeart from '../components/ui/FavorieHeart';
 
 export default function Page() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const { user } = useAuth(); // Récupérer l'utilisateur connecté
   const [listFavorie, setListFavorie] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshList, setRefreshList] = useState(false);
+
+  const handleClickRefreshList = () => {
+    setRefreshList(prev => !prev);  // Toggle l'état refreshList pour rafraîchir la liste
+  };
 
   // Récupérer la liste des favoris de l'utilisateur
   useEffect(() => {
     if (!user?.id) return; // Vérifier si l'utilisateur est connecté
     setLoading(true); // Activer le loading lors de la récupération des favoris
-
     const fetchFavorie = async () => {
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_PATH_URL}/api/favorie/getListFav?idUser=${user.id}`, {
@@ -35,7 +39,7 @@ export default function Page() {
     };
 
     fetchFavorie();
-  }, [user?.id]); // Re-exécuter le useEffect lorsque l'id de l'utilisateur change
+  }, [user?.id, refreshList]); // Re-exécuter le useEffect lorsque l'id de l'utilisateur ou refreshList change
 
   // Effet pour récupérer les films en fonction des favoris
   useEffect(() => {
@@ -64,7 +68,7 @@ export default function Page() {
     };
 
     fetchMovies();
-  }, [listFavorie]); // Re-exécuter le useEffect lorsque la liste des favoris change
+  }, [listFavorie, refreshList]); // Re-exécuter le useEffect lorsque la liste des favoris ou refreshList change
 
   if (loading) {
     return (
@@ -83,46 +87,35 @@ export default function Page() {
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Films favoris</h1>
-      <div className="flex flex-wrap gap-6">
+    <div className=" bg-base-200 w-[100%] p-4 ">
+      <h1 className="text-4xl font-bold text-center text-gray-800 mb-8 ">
+        Films favoris
+      </h1>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ">
         {movies.map((movie) => (
-          <div
-            key={movie.id}
-            className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow border-2 border-primary flex items-center space-x-6 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.33%-16px)]"
-          >
-            {/* Image du film */}
-            <img
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-              alt={movie.title}
-              className="w-32 h-48 object-cover rounded-lg"
-            />
-  
-            {/* Informations du film */}
-            <div className="flex-1">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">{movie.title}</h3>
-              <p className="text-gray-600 text-sm mb-2">Date de sortie: {movie.release_date}</p>
-              <div className="flex items-center text-yellow-500">
-                <span className="text-lg font-semibold">{movie.vote_average}</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  className="h-6 w-6 ml-1"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 2l2 7h7l-5 5 2 7-6-4-6 4 2-7-5-5h7l2-7z"
-                  />
-                </svg>
+          <div className="card card-side bg-base-100 shadow-xl  border-2 border-solid border-primary" key={movie.id}>
+            <figure>
+              <img
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+                className="w-32 h-48 object-cover rounded-lg"
+              />
+            </figure>
+            <div className="card-body text-base-content">
+              <h3 className="text-xl font-semibold  mb-2">
+                {movie.title}
+              </h3>
+              <p className="text-sm mb-2">
+                Date de sortie: {movie.release_date}
+              </p>
+              <div className="flex items-center justify-between">
+                <span className="text-lg font-semibold text-yellow-500">
+                  Note : {movie.vote_average}
+                </span>
+                <div className="card-actions" onClick={handleClickRefreshList}>
+                  <FavorieHeart movieId={movie.id} id={user?.id} favorite={true}/>
+                </div>
               </div>
-            </div>
-  
-            {/* Bouton cœur */}
-            <div className="flex items-center justify-center w-12 h-12  rounded-full  bg-red-500 transition-colors">
-              <Heart className="text-gray-700 text-white" />
             </div>
           </div>
         ))}

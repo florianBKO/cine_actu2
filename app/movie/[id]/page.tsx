@@ -15,8 +15,8 @@ export default async function MoviePage(props: { params: Promise<{ id: string }>
   const { id } = await props.params;
 
   const [movieRes, trailerRes] = await Promise.all([
-    fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=be202a75160ad60b4028904d9b7e6e22`),
-    fetch(`https://api.themoviedb.org/3/movie/${id}/videos?api_key=be202a75160ad60b4028904d9b7e6e22`)
+    fetch(`${process.env.NEXT_PUBLIC_PATH_URL}/api/movie?categorie=oneMovie&id=${id}`),
+    fetch(`${process.env.NEXT_PUBLIC_PATH_URL}/api/movie?categorie=videos&id=${id}`),
   ]);
 
   if (!movieRes.ok) {
