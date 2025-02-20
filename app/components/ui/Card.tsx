@@ -1,4 +1,4 @@
-import { Clapperboard, Heart, } from "lucide-react";
+import { Clapperboard } from "lucide-react";
 import RadialProgress from './RadialProgress';
 import { CardProps } from '@/app/prototypes';
 import Link from "next/link";
@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import FavorieHeart from "./FavorieHeart";
 
 
-export default function Card({ id, title, poster_path, release_date, vote_average,favorite }: CardProps) {
+export default function Card({ id, title, poster_path, release_date, vote_average,favorite,type }: CardProps) {
   const imageUrl = poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : 'https://via.placeholder.com/500';
   const { user }   = useAuth();
   // Formatage de la date
@@ -44,13 +44,13 @@ export default function Card({ id, title, poster_path, release_date, vote_averag
         <h4 className="card-title text-base font-bold text-center line-clamp-2 min-h-[2rem]  text-base-dark flex justify-center" style={{position: "relative"}}>
           {title}   
           {user ? 
-          <FavorieHeart movieId={id} id={user?.id} favorite={favorite} /> : null}
+          <FavorieHeart movieId={id} id={user?.id} favorite={favorite} type={type}/> : null}
 
         </h4>
 
         {/* Actions */}
         <div className="card-actions flex flex-col items-center gap-2 ">
-          <Link href={`/movie/${id}`}>
+          <Link href={`/movie?id=${id}&type=${type}`}>
             <button className="btn btn-sm bg-blue-500 hover:bg-blue-600 text-white w-full gap-2 transition-colors duration-200 ">
               Plus d'infos
               <Clapperboard className="w-4 h-4" />

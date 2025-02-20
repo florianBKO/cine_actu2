@@ -3,25 +3,32 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Movie } from '@/app/prototypes';
 import FavorieHeart from '../components/ui/FavorieHeart';
+import RadialProgress from '../components/ui/RadialProgress';
 
 export default function Page() {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const { user } = useAuth(); // Récupérer l'utilisateur connecté
+  const { user } = useAuth();
   const [listFavorie, setListFavorie] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [refreshList, setRefreshList] = useState(false);
 
-  const handleClickRefreshList = () => {
-    setRefreshList(prev => !prev);  // Toggle l'état refreshList pour rafraîchir la liste
+  const handleRemoveFavorite = (movieId: number, type: string) => {
+    // Mise à jour de la liste de favoris
+    setListFavorie(prev => prev.filter(fav =>
+      !(fav.id_movie === movieId && fav.type === type)));
+
+    // Mise à jour de la liste des films
+    setMovies(prev => prev.filter(movie =>
+      !(movie.id === movieId && movie.type === type)));
   };
 
-  // Récupérer la liste des favoris de l'utilisateur
+  // la liste des favoris au chargement 
   useEffect(() => {
-    if (!user?.id) return; // Vérifier si l'utilisateur est connecté
-    setLoading(true); // Activer le loading lors de la récupération des favoris
+    if (!user?.id) return;
+    setLoading(true);
+
     const fetchFavorie = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_PATH_URL}/api/favorie/getListFav?idUser=${user.id}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_PATH_URL}/api/favorie/getListFavUser?idUser=${user.id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -30,7 +37,7 @@ export default function Page() {
 
         if (!response.ok) throw new Error('Erreur lors de la récupération des favoris');
         const data = await response.json();
-        setListFavorie(data); // Mettre à jour la liste des favoris
+        setListFavorie(data);
       } catch (error) {
         console.error('Erreur lors de la récupération des favoris', error);
       } finally {
@@ -39,26 +46,30 @@ export default function Page() {
     };
 
     fetchFavorie();
-  }, [user?.id, refreshList]); // Re-exécuter le useEffect lorsque l'id de l'utilisateur ou refreshList change
+  }, [user?.id]); // Dépendance correcte
 
-  // Effet pour récupérer les films en fonction des favoris
+  // Récupérer les détails des films/séries en favoris
   useEffect(() => {
-    if (listFavorie.length === 0) return; // Si la liste des favoris est vide, ne rien faire
+    if (listFavorie.length === 0) {
+      setMovies([]);
+      return;
+    }
 
     const fetchMovies = async () => {
       try {
         setLoading(true);
 
-        // Récupérer les informations détaillées des films en fonction de l'ID des favoris
-        const movieRequests = listFavorie.map((favorie) =>
-          fetch(`https://api.themoviedb.org/3/movie/${favorie.id_movie}?api_key=be202a75160ad60b4028904d9b7e6e22`)
-        );
+        const movieRequests = listFavorie.map((favorie) => {
+          const type = favorie.type === 'serie' ? 'tv' : favorie.type;
+          return fetch(`https://api.themoviedb.org/3/${type}/${favorie.id_movie}?api_key=be202a75160ad60b4028904d9b7e6e22`)
+            .then((res) => res.json())
+            .then((movieData) => ({
+              ...movieData,
+              type: favorie.type,
+            }));
+        });
 
-        // Attendre que toutes les requêtes soient terminées
-        const responses = await Promise.all(movieRequests);
-        const movieData = await Promise.all(responses.map((res) => res.json()));
-
-        // Mettre à jour les films avec les données récupérées
+        const movieData = await Promise.all(movieRequests);
         setMovies(movieData);
       } catch (error) {
         console.error('Erreur lors de la récupération des films', error);
@@ -68,8 +79,9 @@ export default function Page() {
     };
 
     fetchMovies();
-  }, [listFavorie, refreshList]); // Re-exécuter le useEffect lorsque la liste des favoris ou refreshList change
+  }, [listFavorie]);
 
+  // Affichage pendant le chargement
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -78,22 +90,27 @@ export default function Page() {
     );
   }
 
+  // Aucun favori trouvé
   if (movies.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <h2>Aucun film trouvé.</h2>
+        <h2>Aucun film trouvé dans vos favoris.</h2>
       </div>
     );
   }
 
+  // Rendu principal
   return (
-    <div className=" bg-base-200 w-[100%] p-4 ">
-      <h1 className="text-4xl font-bold text-center text-gray-800 mb-8 ">
+    <div className="bg-base-200 w-full p-4">
+      <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
         Films favoris
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {movies.map((movie) => (
-          <div className="card card-side bg-base-100 shadow-xl  border-2 border-solid border-primary" key={movie.id}>
+          <div
+            key={`${movie.id}-${movie.type}`}
+            className="card card-side bg-base-100 shadow-xl border-2 border-solid border-primary"
+          >
             <figure>
               <img
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -102,19 +119,26 @@ export default function Page() {
               />
             </figure>
             <div className="card-body text-base-content">
-              <h3 className="text-xl font-semibold  mb-2">
-                {movie.title}
-              </h3>
-              <p className="text-sm mb-2">
-                Date de sortie: {movie.release_date}
-              </p>
+
+              <div className='flex justify-between'> <h3 className="text-xl font-semibold mb-2">{movie.title || movie.name}</h3>
+                <span style={{ position: 'relative', top: 0, right: 0 }}>
+                  <RadialProgress vote_average={movie.vote_average} />
+                </span>
+              </div>
+
+              <p className="text-sm mb-2">Date de sortie: {movie.release_date || movie.first_air_date}  </p>
               <div className="flex items-center justify-between">
                 <span className="text-lg font-semibold text-yellow-500">
-                  Note : {movie.vote_average}
+                  Note : {movie.vote_average?.toFixed(1)}
                 </span>
-                <div className="card-actions" onClick={handleClickRefreshList}>
-                  <FavorieHeart movieId={movie.id} id={user?.id} favorite={true}/>
-                </div>
+                <FavorieHeart
+                  movieId={movie.id}
+                  id={user?.id}
+                  favorite={true}
+                  type={movie.type}
+                  onRefresh={() => handleRemoveFavorite(movie.id, movie.type)}
+                />
+
               </div>
             </div>
           </div>

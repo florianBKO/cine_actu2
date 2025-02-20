@@ -41,7 +41,7 @@ function HomeContent() {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_PATH_URL}/api/favorie/getListFav?idUser=${user.id}`,
+        `${process.env.NEXT_PUBLIC_PATH_URL}/api/favorie/getListFavUser?idUser=${user.id}`,
         {
           method: 'GET',
           headers: {
@@ -182,7 +182,8 @@ function HomeContent() {
                   poster_path={movie.poster_path}
                   release_date={movie.release_date}
                   vote_average={movie.vote_average}
-                  favorite={favorites.includes(movie.id)}
+                  favorite={favorites.includes(movie.id)                 
+                  }  type={type}
                 />
               ))}
             </div>

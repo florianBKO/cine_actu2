@@ -19,6 +19,7 @@ model User {
 model Favorie {
   id       Int    @id @default(autoincrement()) // ID auto-incrémenté
   id_movie Int
+  type     String 
   state    String 
   userId   Int // Changement en Int pour correspondre à User.id
   user     User   @relation(fields: [userId], references: [id])

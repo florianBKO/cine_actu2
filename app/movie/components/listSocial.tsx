@@ -1,14 +1,8 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import { Facebook, Instagram, Twitter } from 'lucide-react';
+import { ExternalIds } from '@/app/prototypes';
 
-interface ExternalIds {
-  imdb_id?: string;
-  wikidata_id?: string;
-  facebook_id?: string;
-  instagram_id?: string;
-  twitter_id?: string;
-}
 
 const ListSocial = ({ id }: { id: string }) => {
   const [socialData, setSocialData] = useState<ExternalIds | null>(null);
@@ -36,32 +30,32 @@ const ListSocial = ({ id }: { id: string }) => {
       {error && <p>{error}</p>}
       {socialData ? (
         <ul className="flex space-x-4">
-        
+
           {socialData.facebook_id && (
             <li>
-                <a
+              <a
                 href={`https://www.facebook.com/${socialData.facebook_id}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-xl text-blue-600 border border-blue-600 border-solid p-2 rounded-lg hover:bg-blue-100"              >
                 <Facebook className="w-5 h-5" />
-                
+
               </a>
             </li>
           )}
           {socialData.instagram_id && (
             <li>
-              <a href={`https://www.instagram.com/${socialData.instagram_id}`} target="_blank"                 className="flex items-center gap-2 text-xl text-pink-500 border border-pink-500 border-solid p-2 rounded-lg hover:bg-blue-100"
+              <a href={`https://www.instagram.com/${socialData.instagram_id}`} target="_blank" className="flex items-center gap-2 text-xl text-pink-500 border border-pink-500 border-solid p-2 rounded-lg hover:bg-blue-100"
               >
-                <Instagram className="w-5 h-5"/>
+                <Instagram className="w-5 h-5" />
               </a>
             </li>
           )}
           {socialData.twitter_id && (
             <li>
-              <a href={`https://twitter.com/${socialData.twitter_id}`} target="_blank"                className="flex items-center gap-2 text-xl text-blue-400 border border-blue-400 border-solid p-2 rounded-lg hover:bg-blue-100"  
->
-                <Twitter className="w-5 h-5"/>
+              <a href={`https://twitter.com/${socialData.twitter_id}`} target="_blank" className="flex items-center gap-2 text-xl text-blue-400 border border-blue-400 border-solid p-2 rounded-lg hover:bg-blue-100"
+              >
+                <Twitter className="w-5 h-5" />
               </a>
             </li>
           )}

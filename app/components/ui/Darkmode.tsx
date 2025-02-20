@@ -29,9 +29,9 @@ function Darkmode() {
   return (
     <label className="swap swap-rotate ms-2 border border-black rounded-full p-2">
       {/* L'input coche la case en fonction du thème */}
-      <input 
-        type="checkbox" 
-        className="theme-controller" 
+      <input
+        type="checkbox"
+        className="theme-controller"
         checked={theme === 'dark'}  // coche la case si le thème est sombre
         onChange={toggleTheme}      // Change le thème lors du clic
       />

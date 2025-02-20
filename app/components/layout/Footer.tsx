@@ -16,7 +16,7 @@ function Footer() {
 
 <div className="avatar placeholder">
   <div className="bg-gray-700 text-white w-12 rounded-full">
-  <a href=""><Github className='bg-base-dark'/></a>
+  <a href="https://github.com/florianBKO" target='blank'><Github className='bg-base-dark'/></a>
   </div>
 </div>
     

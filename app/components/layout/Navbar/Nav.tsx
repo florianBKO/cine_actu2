@@ -8,22 +8,8 @@ import Darkmode from '@/app/components/ui/Darkmode';
 import LogoutButton from '../LogoutButton';
 import { useAuth } from '@/contexts/AuthContext';
 import logoSite from '@/public/logo.png';
+import { MenuItem, NavLinkProps } from '@/app/prototypes';
 
-// Types
-interface MenuItem {
-  name: string;
-  subItems: string[];
-  link: string[];
-  requiresAuth?: boolean;
-}
-
-interface NavLinkProps {
-  href: string;
-  onClick?: () => void;
-  children: React.ReactNode;
-  className?: string;
-  title?: string;
-}
 
 // Constantes
 const MENU_ITEMS: MenuItem[] = [
@@ -34,17 +20,17 @@ const MENU_ITEMS: MenuItem[] = [
       '/?type=movie&categorie=les%20plus%20populaire',
       '/?type=movie&categorie=du%20moment',
       '/?type=movie&categorie=a%20venir',
-      '/?type=movie&categorie=Les%20mieux%20evalues',
+      '/?type=movie&categorie=Les mieux evalués',
     ],
   },
   {
     name: 'Émissions télévisées',
-    subItems: ['Populaire', 'Diffusées aujourd\'hui', 'En cours de diffusion', 'Les mieux evalués'],
+    subItems: ['Populaire', 'Diffusées aujourd\'hui', 'En cours de diffusion', 'Les mieux évalués'],
     link: [
       '/?type=serie&categorie=les%20plus%20populaire',
       '/?type=serie&categorie=Diffusées%20aujourdhui',
       '/?type=serie&categorie=En%20cours%20de%20diffusion',
-      '/?type=serie&categorie=Les%20mieux%20évalués',
+      '/?type=serie&categorie=Les mieux évalués',
     ],
   },
   {
@@ -150,7 +136,7 @@ export default function Nav() {
       {filteredMenuItems.map((item, index) => (
         <li
           key={index}
-          ref={el => (dropdownRefs.current[index] = el)}
+          ref={(el) => { dropdownRefs.current[index] = el; }}
           className={`dropdown mx-2 ${activeDropdown === index ? 'dropdown-open' : ''}`}
         >
           <div

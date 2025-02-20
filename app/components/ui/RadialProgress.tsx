@@ -8,8 +8,8 @@ function RadialProgress({ vote_average }: ValueProgress) {
   const percentage = Math.floor(vote_average * 10);
 
   const getColorClass = (value: number) => {
-    if (value >= 75) return 'text-success bg-success/20';
-    if (value >= 50) return 'text-warning bg-warning/20';
+    if (value >= 75) return 'text-green-600 bg-green-100';
+    if (value >= 50) return 'text-yellow-400 bg-warning/20';
     return 'text-error bg-error/20';
   };
 

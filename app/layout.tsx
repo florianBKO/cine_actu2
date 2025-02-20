@@ -20,6 +20,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Cine Actu",
   description: "Cine Actu",
+  // Ajouter un favicon ici
+  icons: {
+    icon: "/logo.png", 
+  }
 };
 
 export default function RootLayout({
@@ -30,19 +34,14 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
-
-      <AuthProvider>
-      <AlertProvider>
-
-        <Nav/>  
-        {children} </AlertProvider>
-       
-       <BtnTopPage/>
-      
-        <Footer/>
+        <AuthProvider>
+          <AlertProvider>
+            <Nav />
+            {children}
+            <BtnTopPage />
+            <Footer />
+          </AlertProvider>
         </AuthProvider>
-       
-
       </body>
     </html>
   );

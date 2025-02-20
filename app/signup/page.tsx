@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, User, UserPlus, Lock } from 'lucide-react';
 import { useAlert } from '@/contexts/Alert';
-
+import InputField from './InputField';
 export default function SignupPage() {
   const { addAlert } = useAlert(); // Ajouter le hook useAlert
   const [formData, setFormData] = useState({
@@ -95,89 +95,38 @@ export default function SignupPage() {
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-5">
-              <div className="relative">
-                <label htmlFor="pseudo" className="block text-sm font-medium text-base-content mb-1">
-                  Pseudo
-                </label>
-                <div className="relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <User className="h-5 w-5 text-dark " />
-                  </div>
-                  <input
-                    id="pseudo"
-                    name="pseudo"
-                    type="text"
-                    required
-                    className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:ring-2 focus:ring-indigo-600 focus:border-transparent py-3 text-sm"
-                    placeholder="Votre pseudo"
-                    value={formData.pseudo}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-
-              <div className="relative">
-                <label htmlFor="email" className="block text-sm font-medium text-base-content mb-1">
-                  Email
-                </label>
-                <div className="relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5  text-dark" />
-                  </div>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:ring-2 focus:ring-indigo-600 focus:border-transparent py-3 text-sm"
-                    placeholder="votre@email.com"
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-
-              <div className="relative">
-                <label htmlFor="password" className="block text-sm font-medium text-base-content mb-1">
-                  Mot de passe
-                </label>
-                <div className="relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-dark" />
-                  </div>
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:ring-2 focus:ring-indigo-600 focus:border-transparent py-3 text-sm"
-                    placeholder="Mot de passe"
-                    value={formData.password}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-
-              <div className="relative">
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-base-content mb-1">
-                  Confirmer le mot de passe
-                </label>
-                <div className="relative rounded-md shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-dark " />
-                  </div>
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type="password"
-                    required
-                    className="pl-10 block w-full rounded-lg border-gray-300 bg-gray-50 focus:ring-2 focus:ring-indigo-600 focus:border-transparent py-3 text-sm"
-                    placeholder="Confirmer le mot de passe"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
+              <InputField
+                label="Pseudo"
+                name="pseudo"
+                type="text"
+                value={formData.pseudo}
+                onChange={handleChange}
+                icon={User}
+              />
+              <InputField
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                icon={Mail}
+              />
+              <InputField
+                label="Mot de passe"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                icon={Lock}
+              />
+              <InputField
+                label="Confirmer le mot de passe"
+                name="confirmPassword"
+                type="password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                icon={Lock}
+              />
             </div>
 
             <div className="pt-2">

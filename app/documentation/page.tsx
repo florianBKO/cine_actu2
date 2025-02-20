@@ -1,114 +1,152 @@
 import React from 'react';
-import { Terminal, Package, SmilePlus, Film, Code } from 'lucide-react';
+import { Terminal, Package, ShieldCheck, PlayCircle, LockKeyhole, SwatchBook, Users, Database, Cloud } from 'lucide-react';
 
 export default function DocumentationPage() {
   return (
     <div className="min-h-screen bg-base-200 p-8 text-base-content">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* En-tête */}
-        <h1 className="text-4xl font-bold mb-8 flex justify-center ">Documentation du Projet</h1>
+        <h1 className="text-4xl font-bold mb-8 text-center">📖 Documentation du Projet CineActu</h1>
 
-        {/* Section Installation */}
+        {/* Section Installation du Projet */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title flex items-center gap-2">
-              <Terminal className="w-6 h-6 " />
+              <Terminal className="w-6 h-6" />
               Installation du Projet
             </h2>
             <div className="mockup-code">
-              <pre data-prefix="1"><code>npx create-next-app@latest mon-projet</code></pre>
-              <pre data-prefix="2"><code>cd mon-projet</code></pre>
+              <pre data-prefix="1"><code>npx create-next-app@latest cine_actu2</code></pre>
+              <pre data-prefix="2"><code>cd cine_actu2</code></pre>
+              <pre data-prefix="3"><code>npm install</code></pre>
             </div>
-            <p className="mt-4 ">Options de configuration recommandées :</p>
+            <p className="mt-4">Configuration recommandée :</p>
             <ul className="list-disc list-inside pl-4 space-y-2">
-              <li>TypeScript → Yes</li>
-              <li>ESLint → Yes</li>
-              <li>Tailwind CSS → Yes</li>
-              <li>App Router → Yes</li>
-              <li>Import alias → Yes</li>
+              <li>TypeScript → ✅</li>
+              <li>Tailwind CSS  ✅</li>
             </ul>
           </div>
         </div>
 
-        {/* Section DaisyUI */}
+        {/* Section Variables d'environnement */}
+        <div className="card bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title flex items-center gap-2">
+              <LockKeyhole className="w-6 h-6" />
+              Variables d'environnement
+            </h2>
+            <p>Assurez-vous de configurer les variables d'environnement suivantes dans votre fichier <code>.env</code> :</p>
+            <ul className="list-disc list-inside pl-4 space-y-2">
+              <li><strong><code>DATABASE_URL</code></strong> — URL de connexion à votre base de données (par exemple : <code>mysql://user:password@localhost:3306/mydatabase</code>).</li>
+              <li><strong><code>JWT_SECRET</code></strong> — Clé secrète utilisée pour signer les tokens JWT (par exemple : <code>votre-secret-key-tres-securisee</code>).</li>
+              <li><strong><code>API_KEY_THEMOVIE</code></strong> — Clé API pour accéder à l'API de TheMovieDB. <a href="https://developer.themoviedb.org/docs/getting-started" target="_blank">Obtenez un token API ici</a>(Simple a obtenir).</li>
+              <li><strong><code>NEXT_PUBLIC_PATH_URL</code></strong> — URL de votre application Next.js en développement (par exemple : <code>http://localhost:3000/</code>).</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Section Dépendances Principales */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title flex items-center gap-2">
               <Package className="w-6 h-6" />
-              Installation de DaisyUI
+              Dépendances Principales
+            </h2>
+            <ul className="list-disc list-inside pl-4 space-y-2">
+              <li><strong>Next.js 15.1.6</strong> — Framework React pour SSR et SSG. <a href="https://nextjs.org/" target="_blank">Site officiel</a></li>
+              <li><strong>Prisma 6.3.1</strong> — ORM pour interagir avec la base de données. <a href="https://www.prisma.io/" target="_blank">Site officiel</a></li>
+              <li><strong>Next-Auth 4.24.11</strong> — Authentification sécurisée. <a href="https://next-auth.js.org/" target="_blank">Site officiel</a></li>
+              <li><strong>bcryptjs 3.0.0</strong> — Hash des mots de passe. <a href="https://github.com/dcodeIO/bcrypt.js" target="_blank">GitHub</a></li>
+              <li><strong>Lucide-React 0.474.0</strong> — Pack d'icônes. <a href="https://lucide.dev/" target="_blank">Site officiel</a></li>
+              <li><strong>React-Player 2.16.0</strong> — Intégration de vidéos. <a href="https://github.com/CookPete/react-player" target="_blank">GitHub</a></li>
+              <li><strong>Swiper 11.2.2</strong> — Carrousels interactifs. <a href="https://swiperjs.com/" target="_blank">Site officiel</a></li>
+              <li><strong>Jose 5.9.6</strong> — Gestion des tokens JWT. <a href="https://github.com/panva/jose" target="_blank">GitHub</a></li>
+              <li><strong>Motion 12.4.1</strong> — Animations fluides. <a href="https://www.framer.com/motion/" target="_blank">Site officiel</a></li>
+              <li><strong>daisyui</strong> — <a href="https://daisyui.com/" target="_blank">Site officiel</a></li>
+            </ul>
+          </div>
+        </div>
+
+
+        {/* Section Authentification */}
+        <div className="card bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title flex items-center gap-2">
+              <ShieldCheck className="w-6 h-6" />
+              Authentification avec Next-Auth
+            </h2>
+            <p>Intégration de <strong>Next-Auth</strong> avec <strong>Prisma Adapter</strong> pour une gestion sécurisée des utilisateurs.</p>
+            <div className="mockup-code">
+              <pre data-prefix="1"><code>npm install next-auth @next-auth/prisma-adapter</code></pre>
+            </div>
+
+          </div>
+        </div>
+
+
+        {/* Section Composants Vidéos */}
+        <div className="card bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title flex items-center gap-2">
+              <PlayCircle className="w-6 h-6" />
+              Intégration de Vidéos avec React-Player
             </h2>
             <div className="mockup-code">
-              <pre data-prefix="1"><code>npm install daisyui@latest</code></pre>
+              <pre data-prefix="1"><code>npm install react-player</code></pre>
             </div>
-            <p className="mt-4">Configuration dans tailwind.config.js :</p>
+            <p className="mt-4">Exemple d'intégration :</p>
             <div className="mockup-code">
-              <pre data-prefix="1"><code>module.exports = {'{'}</code></pre>
-              <pre data-prefix="2"><code>  content: ['./app/**/*.js,ts,jsx,tsx'],</code></pre>
-              <pre data-prefix="3"><code>  plugins: [require('daisyui')],</code></pre>
-              <pre data-prefix="4"><code>{'}'}</code></pre>
+              <pre data-prefix="1"><code>import ReactPlayer from 'react-player';</code></pre>
+              <pre data-prefix="2"><code>{'<ReactPlayer url="https://youtu.be/xyz" controls />'}</code></pre>
             </div>
           </div>
         </div>
 
-        {/* Section Lucide React */}
+        {/* Section Carrousels */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title flex items-center gap-2">
-              <SmilePlus className="w-6 h-6" />
-              Installation de Lucide React
+              <SwatchBook className="w-6 h-6" />
+              Utilisation de Swiper
             </h2>
             <div className="mockup-code">
-              <pre data-prefix="1"><code>npm install lucide-react</code></pre>
+              <pre data-prefix="1"><code>npm install swiper</code></pre>
             </div>
-            <p className="mt-4">Exemple d'utilisation :</p>
+
+          </div>
+        </div>
+
+        {/* Section Hébergement */}
+        <div className="card bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title flex items-center gap-2">
+              <Cloud className="w-6 h-6" />
+              Hébergement sur Vercel
+            </h2>
+            <p>Le projet est hébergé sur <strong>Vercel</strong>, une plateforme de déploiement continu pour les applications Next.js. Vercel offre une intégration fluide avec GitHub, permettant des déploiements automatiques à chaque push sur la branche principale.</p>
             <div className="mockup-code">
-              <pre data-prefix="1"><code>import {'{ Home }'} from 'lucide-react';</code></pre>
-              <pre data-prefix="2"><code>{'<Home className="w-6 h-6" />'}</code></pre>
+              <pre data-prefix="1"><code>vercel deploy</code></pre>
             </div>
           </div>
         </div>
 
-        {/* Section API TMDB */}
+        {/* Section Base de Données */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title flex items-center gap-2">
-              <Film className="w-6 h-6" />
-              Configuration de l'API TMDB
+              <Database className="w-6 h-6" />
+              Base de Données MySQL sur Railway
             </h2>
-            <div className="space-y-4">
-              <p>1. Créez un compte sur TMDB et obtenez votre clé API</p>
-              <p>2. Créez un fichier .env.local à la racine du projet :</p>
-              <div className="mockup-code">
-                <pre data-prefix="1"><code>API_KEY_THEMOVIE=votre_clé_api</code></pre>
-              </div>
-              <p>3. Exemple d'utilisation de l'API :</p>
-              <div className="mockup-code">
-                <pre data-prefix="1"><code>const BASE_URL = 'https://api.themoviedb.org/3';</code></pre>
-                <pre data-prefix="2"><code>const apiKey = process.env.API_KEY_THEMOVIE;</code></pre>
-                <pre data-prefix="3"><code>const res = await fetch(</code></pre>
-                <pre data-prefix="4"><code>  `BASE_URL/movie/popular?api_key=apiKey&language=fr-FR`</code></pre>
-                <pre data-prefix="5"><code>);</code></pre>
-              </div>
+            <p>La base de données MySQL est hébergée sur <strong>Railway</strong>, une plateforme cloud qui simplifie la gestion des bases de données. Prisma est utilisé pour interagir avec la base de données, offrant une couche d'abstraction puissante et sécurisée.</p>
+            <div className="mockup-code">
+              <pre data-prefix="1"><code>DATABASE_URL="mysql://user:password@host:port/database"</code></pre>
             </div>
           </div>
         </div>
 
-        {/* Section Structure du Projet */}
-        <div className="card bg-base-100 shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title flex items-center gap-2">
-              <Code className="w-6 h-6" />
-              Structure du Projet
-            </h2>
-            <div className="mockup-code">
-              <pre data-prefix="📁"><code>app/</code></pre>
-              <pre data-prefix="├─"><code>api/</code></pre>
-              <pre data-prefix="│ └─"><code>route.ts    # API routes</code></pre>
-              <pre data-prefix="├─"><code>components/   # Composants réutilisables</code></pre>
-              <pre data-prefix="├─"><code>styles/       # Fichiers CSS</code></pre>
-              <pre data-prefix="└─"><code>page.tsx      # Page principale</code></pre>
-            </div>
-          </div>
+        {/* Footer */}
+        <div className="text-center mt-8 text-sm opacity-75">
+          <p>🚀 Projet construit avec Next.js, Prisma, Next-Auth, TailwindCSS, DaisyUI et l'API TMDB. Hébergé sur Vercel avec une base de données MySQL sur Railway.</p>
         </div>
       </div>
     </div>

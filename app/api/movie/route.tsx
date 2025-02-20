@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-// test
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const categorie = searchParams.get('categorie');
@@ -11,68 +11,75 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'La clé API TMDB est manquante.' }, { status: 500 });
   }
 
-  // Récupère les films populaires
-  if (categorie === 'les plus populaire') {
-    const res = await fetch(`${BASE_URL}/movie/popular?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
-    return NextResponse.json(await res.json());
+  if (!categorie) {
+    return NextResponse.json({ error: 'Le paramètre "categorie" est requis.' }, { status: 400 });
   }
 
-  // Récupère les films actuellement en salles
-  if (categorie === 'du moment') {
-    const res = await fetch(`${BASE_URL}/movie/now_playing?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
-    return NextResponse.json(await res.json());
-  }
+  try {
+    let res;
 
-  // Récupère les films les mieux notés
-  if (categorie === 'Les mieux evalués') {
-    const res = await fetch(`${BASE_URL}/movie/top_rated?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
-    return NextResponse.json(await res.json());
-  }
+    switch (categorie) {
+      case 'les plus populaire':
+        res = await fetch(`${BASE_URL}/movie/popular?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
+        break;
 
-  // Récupère les prochaines sorties
-  if (categorie === 'a venir') {
-    const res = await fetch(`${BASE_URL}/movie/upcoming?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
-    return NextResponse.json(await res.json());
-  }
-  // Récupère les prochaines sorties
-  if (categorie === 'videos') {
-    const id = searchParams.get('id');
-    const res = await fetch(`${BASE_URL}/movie/${id}/videos?api_key=${apiKey}`, { cache: 'no-store' });
-    return NextResponse.json(await res.json());
-  }
+      case 'du moment':
+        res = await fetch(`${BASE_URL}/movie/now_playing?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
+        break;
 
+      case 'Les mieux evalués':
+        res = await fetch(`${BASE_URL}/movie/top_rated?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
+        break;
 
+      case 'a venir':
+        res = await fetch(`${BASE_URL}/movie/upcoming?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
+        break;
 
-  // Recherche de films par mot-clé (nécessite le paramètre "query")
-  if (categorie === 'search') {
-    const query = searchParams.get('query');
-    if (!query) {
-      return NextResponse.json({ error: 'Le paramètre "query" est requis pour la recherche.' }, { status: 400 });
+      case 'videos': {
+        const id = searchParams.get('id');
+        if (!id) {
+          return NextResponse.json({ error: 'Le paramètre "id" est requis pour récupérer les vidéos.' }, { status: 400 });
+        }
+        res = await fetch(`${BASE_URL}/movie/${id}/videos?api_key=${apiKey}`, { cache: 'no-store' });
+        break;
+      }
+
+      case 'search': {
+        const query = searchParams.get('query');
+        if (!query) {
+          return NextResponse.json({ error: 'Le paramètre "query" est requis pour la recherche.' }, { status: 400 });
+        }
+        res = await fetch(
+          `${BASE_URL}/search/movie?api_key=${apiKey}&query=${encodeURIComponent(query)}&language=fr-FR&page=${page}`,
+          { cache: 'no-store' }
+        );
+        break;
+      }
+
+      case 'detail': {
+        const id = searchParams.get('id');
+        if (!id) {
+          return NextResponse.json({ error: 'Le paramètre "id" est requis pour récupérer les détails.' }, { status: 400 });
+        }
+        res = await fetch(`${BASE_URL}/movie/${id}?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
+        break;
+      }
+
+      case 'oneMovie': {
+        const id = searchParams.get('id');
+        if (!id) {
+          return NextResponse.json({ error: 'Le paramètre "id" est requis pour récupérer les détails.' }, { status: 400 });
+        }
+        res = await fetch(`${BASE_URL}/movie/${id}?api_key=${apiKey}`, { cache: 'no-store' });
+        break;
+      }
+
+      default:
+        return NextResponse.json({ error: 'Catégorie non reconnue.' }, { status: 400 });
     }
-    const res = await fetch(
-      `${BASE_URL}/search/movie?api_key=${apiKey}&query=${encodeURIComponent(query)}&language=fr-FR&page=${page}`,
-      { cache: 'no-store' }
-    );
 
     return NextResponse.json(await res.json());
-  }
-
-  // Récupère les détails d'un film spécifique (nécessite le paramètre "id")
-  if (categorie === 'detail') {
-    const id = searchParams.get('id');
-    if (!id) {
-      return NextResponse.json({ error: 'Le paramètre "id" est requis pour récupérer les détails.' }, { status: 400 });
-    }
-    const res = await fetch(`${BASE_URL}/movie/${id}?api_key=${apiKey}&language=fr-FR&page=${page}`, { cache: 'no-store' });
-    return NextResponse.json(await res.json());
-  }
-  // Récupère les détails d'un film spécifique (nécessite le paramètre "id")
-  if (categorie === 'oneMovie') {
-    const id = searchParams.get('id');
-    if (!id) {
-      return NextResponse.json({ error: 'Le paramètre "id" est requis pour récupérer les détails.' }, { status: 400 });
-    }
-    const res = await fetch(`${BASE_URL}/movie/${id}?api_key=${apiKey}`, { cache: 'no-store' });
-    return NextResponse.json(await res.json());
+  } catch (error) {
+    return NextResponse.json({ error: 'Une erreur s\'est produite lors de la récupération des données.' }, { status: 500 });
   }
 }

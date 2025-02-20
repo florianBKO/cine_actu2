@@ -13,7 +13,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
-
+ // Valeurs par défaut si les champs sont vides
+ const defaultEmail = 'test@hotmail.fr';
+ const defaultPassword = 'test@hotmail.fr';
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -22,7 +24,10 @@ export default function LoginPage() {
       const res = await fetch(`${process.env.NEXT_PUBLIC_PATH_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email: email || defaultEmail,
+          password: password || defaultPassword,
+         }),
       });
 
       if (!res.ok) {
@@ -75,7 +80,7 @@ export default function LoginPage() {
                 <input
                   id="email"
                   type="email"
-                  required
+                  placeholder='test@hotmail.fr'
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 placeholder"
@@ -89,7 +94,7 @@ export default function LoginPage() {
                 <input
                   id="password"
                   type="password"
-                  required
+                  placeholder='test@hotmail.fr'
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 placeholder "
@@ -103,6 +108,7 @@ export default function LoginPage() {
               
               <div className="form-control mt-6 space-y-4">
                 <button className="btn btn-primary w-full">Se connecter</button>
+                <button className="btn btn-primary w-full">Compte Test</button>
                 <div className="text-center">
                   <span className="text-sm">Pas encore de compte ?</span>
                   <Link 
