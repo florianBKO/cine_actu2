@@ -1,7 +1,14 @@
+## 📱 Accédez au Projet
+
+Le projet est hébergé sur [Apercu](https://cine-actu2.vercel.app/).
+
+---
 
 # 📖 Documentation du Projet CineActu
 
-Bienvenue dans la documentation du projet **CineActu**, une application web de gestion de films utilisant **Next.js**, **Prisma**, **Next-Auth**, et plusieurs autres technologies modernes. Ce projet permet de visualiser des jaquete de films, d'interagir avec une base de données et d'utiliser l'API de **TheMovieDB**.
+Bienvenue dans la documentation du projet CineActu, une application web de gestion de films utilisant Next.js, Prisma, Next-Auth, et plusieurs autres technologies modernes. Ce projet permet de visualiser des jaquettes de films, d'interagir avec une base de données et d'utiliser l'API de TheMovieDB.
+
+
 
 ## 🚀 Installation et Lancement
 
@@ -33,7 +40,7 @@ NEXT_PUBLIC_PATH_URL="http://localhost:3000/"
 3. Mettez à jour votre base de données avec Prisma :
 
    ```bash
-   npx prisma migrate dev
+   npm prisma migrate dev
    ```
 
 4. Démarrez le serveur de développement :
@@ -137,10 +144,6 @@ DATABASE_URL="mysql://user:password@host:port/database"
 
 ---
 
-## 📱 Accédez au Projet
 
-Le projet est hébergé sur [Vercel ici](https://cine-actu2.vercel.app/).
-
----
 
 🚀 **Projet construit avec Next.js, Prisma, Next-Auth, TailwindCSS, DaisyUI et l'API TMDB. Hébergé sur Vercel avec une base de données MySQL sur Railway.**
