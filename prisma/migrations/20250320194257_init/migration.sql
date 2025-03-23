@@ -13,6 +13,7 @@ CREATE TABLE `User` (
 CREATE TABLE `Favorie` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `id_movie` INTEGER NOT NULL,
+    `type` VARCHAR(191) NOT NULL,
     `state` VARCHAR(191) NOT NULL,
     `userId` INTEGER NOT NULL,
 
